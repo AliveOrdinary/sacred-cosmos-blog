@@ -1,0 +1,84 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { supabase } from '../lib/supabase';
+import { marked } from 'marked';
+
+export const prerender = false; // Strictly SSR
+
+const { date } = Astro.params;
+
+// Fetch the specific post by date
+const { data: post, error } = await supabase
+  .from('daily_blogs')
+  .select('*')
+  .eq('publish_date', date)
+  .single();
+
+if (error || !post) {
+  // Return a 404 response natively via Astro
+  return new Response("Not found", {
+    status: 404,
+    statusText: 'Not found'
+  });
+}
+
+// Parse markdown to HTML
+const contentHtml = marked.parse(post.content || '');
+
+// Format Date correctly regardless of local timezone
+const formatDate = (dateStr: string) => {
+  const d = new globalThis.Date(dateStr);
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC' // Assuming the date from DB is treated as UTC YYYY-MM-DD
+  }).format(d);
+};
+
+const displayDate = formatDate(post.publish_date);
+---
+
+<Layout title={`${post.theme_title} | Sacred Cosmos`}>
+  <article class="max-w-none fade-in">
+    <header class="mb-12 border-b border-zinc-900 pb-8">
+      <div class="mb-4 text-fuchsia-500 font-mono text-xs md:text-sm uppercase tracking-widest flex items-center gap-2">
+        <span class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-fuchsia-500 animate-pulse"></span>
+        <time datetime={post.publish_date}>{displayDate}</time>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-serif font-black tracking-tighter uppercase text-zinc-50 leading-none">
+        {post.theme_title}
+      </h1>
+    </header>
+
+    {post.hero_image_url && (
+      <figure class="mb-12 aspect-[21/9] w-full overflow-hidden border border-zinc-800 rounded-sm">
+        <img 
+          src={post.hero_image_url} 
+          alt={`Visual representation of ${post.theme_title}`} 
+          class="w-full h-full object-cover mix-blend-luminosity hover:mix-blend-normal transition-all duration-700 hover:scale-105"
+        />
+      </figure>
+    )}
+
+    <!-- Custom Tailwind Typography styling defined in global.css `.sacred-prose` -->
+    <div class="sacred-prose" set:html={contentHtml} />
+    
+    <nav class="mt-20 border-t border-zinc-900 pt-8">
+      <a href="/" class="inline-flex items-center text-sm font-mono text-zinc-500 hover:text-fuchsia-400 transition-colors uppercase tracking-widest group">
+        <span class="mr-2 group-hover:-translate-x-1 transition-transform">&larr;</span> Return to Void
+      </a>
+    </nav>
+  </article>
+</Layout>
+
+<style>
+  .fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

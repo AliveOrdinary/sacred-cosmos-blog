@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-sacred-neon: var(--color-fuchsia-500);
+  --color-sacred-accent: var(--color-purple-500);
+  --font-sans: "Inter", "Space Grotesk", system-ui, sans-serif;
+  --font-serif: "Space Grotesk", "Georgia", serif;
+}
+
+@layer base {
+  body {
+    @apply bg-zinc-950 text-zinc-200 font-sans antialiased selection:bg-fuchsia-500 selection:text-white min-h-screen relative;
+  }
+}
+
+@layer components {
+  /* Brutalist SVG Noise Overlay */
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* Customization for the brutalist typography */
+  .sacred-prose {
+    @apply prose prose-invert prose-zinc max-w-none;
+    @apply prose-headings:font-serif prose-headings:font-black prose-headings:tracking-tighter prose-headings:uppercase;
+    @apply prose-a:text-fuchsia-500 prose-a:no-underline hover:prose-a:underline prose-a:decoration-fuchsia-500/50;
+    @apply prose-blockquote:border-l-fuchsia-500 prose-blockquote:bg-zinc-900/50 prose-blockquote:py-1 prose-blockquote:px-4;
+    @apply prose-strong:text-zinc-50;
+    @apply prose-img:rounded-md prose-img:border prose-img:border-zinc-800;
+  }
+}
