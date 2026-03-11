@@ -1,36 +1,41 @@
 ---
 import '../styles/global.css';
+import SEO from '../components/SEO.astro';
 
 interface Props {
-  title: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishDate?: string;
 }
 
-const { title } = Astro.props;
+const { title, description, image, type, publishDate } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" class="dark">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="A modern astrology brand: Sacred Cosmos" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      publishDate={publishDate}
+    />
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <title>{title}</title>
   </head>
   <body>
     <!-- SVG Noise overlay -->
     <div class="noise-overlay"></div>
     
     <!-- Main content container -->
-    <div class="max-w-3xl mx-auto px-6 py-12 md:py-20 relative z-10 min-h-screen flex flex-col">
-      <header class="mb-16">
+    <div class="max-w-3xl mx-auto px-5 sm:px-6 py-8 md:py-20 relative z-10 min-h-screen flex flex-col">
+      <header class="mb-10 md:mb-16">
         <a href="/" class="group inline-block">
           <h1 class="text-3xl md:text-5xl font-serif font-black tracking-tighter uppercase text-zinc-100 group-hover:text-fuchsia-500 transition-colors duration-300">
             Sacred Cosmos
@@ -43,8 +48,14 @@ const { title } = Astro.props;
         <slot />
       </div>
 
-      <footer class="mt-20 border-t border-zinc-900 pt-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs font-mono text-zinc-600 uppercase tracking-widest gap-4">
-        <p>&copy; 2026 Sacred Cosmos</p>
+      <footer class="mt-16 md:mt-20 border-t border-zinc-900 pt-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs font-mono text-zinc-600 uppercase tracking-widest gap-6 md:gap-4">
+        <div class="flex flex-col md:flex-row gap-4 items-center">
+          <p>&copy; 2026 Sacred Cosmos</p>
+          <div class="flex gap-4 md:gap-3">
+            <a href="https://www.instagram.com/sacredcosmos_insights/" rel="me noopener noreferrer" target="_blank" class="hover:text-fuchsia-500 transition-colors py-2 md:py-0 px-2 md:px-0 -mx-2 md:mx-0">Instagram</a>
+            <a href="https://www.facebook.com/people/Sacred-Cosmos-Insights/61582701843041/" rel="me noopener noreferrer" target="_blank" class="hover:text-fuchsia-500 transition-colors py-2 md:py-0 px-2 md:px-0 -mx-2 md:mx-0">Facebook</a>
+          </div>
+        </div>
         <p>The Void Beckons.</p>
       </footer>
     </div>

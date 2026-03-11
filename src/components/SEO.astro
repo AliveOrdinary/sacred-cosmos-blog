@@ -1,0 +1,98 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishDate?: string;
+  canonicalURL?: URL | string;
+}
+
+const {
+  title = "Sacred Cosmos | Daily Insights",
+  description = "A modern astrology brand: Sacred Cosmos. Daily insights from the void.",
+  image = "/favicon.svg", // Fallback image if needed, ideally a dedicated og-image.jpg
+  type = "website",
+  publishDate,
+  canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url),
+} = Astro.props;
+
+// Ensure relative image paths are resolved to absolute URLs
+const resolvedImage = new URL(image, Astro.site || Astro.url).toString();
+
+// Core JSON-LD logic
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Sacred Cosmos",
+  "url": Astro.site?.toString() || Astro.url.origin,
+  "logo": new URL("/favicon.svg", Astro.site || Astro.url).toString(),
+  "sameAs": [
+    "https://www.instagram.com/sacredcosmos_insights/",
+    "https://www.facebook.com/people/Sacred-Cosmos-Insights/61582701843041/"
+  ]
+};
+
+// Website specific JSON-LD
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Sacred Cosmos | Daily Insights",
+  "url": Astro.site?.toString() || Astro.url.origin,
+};
+
+// Article specific JSON-LD
+const articleSchema = type === 'article' ? {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title.replace(' | Sacred Cosmos', ''),
+  "image": [
+    resolvedImage
+  ],
+  "datePublished": publishDate,
+  "dateModified": publishDate,
+  "author": [{
+      "@type": "Organization",
+      "name": "Sacred Cosmos",
+      "url": Astro.site?.toString() || Astro.url.origin
+    }]
+} : null;
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={resolvedImage} />
+{type === 'article' && publishDate && (
+  <meta property="article:published_time" content={publishDate} />
+)}
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={resolvedImage} />
+
+<!-- JSON-LD Scripts -->
+<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+{articleSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+)}
