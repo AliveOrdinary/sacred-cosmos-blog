@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import SEO from '../components/SEO.astro';
+import Background from '../components/Background.astro';
 
 interface Props {
   title?: string;
@@ -30,8 +31,8 @@ const { title, description, image, type, publishDate } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;700;900&display=swap" rel="stylesheet">
   </head>
   <body>
-    <!-- SVG Noise overlay -->
-    <div class="noise-overlay"></div>
+    <!-- Starry background -->
+    <Background />
     
     <!-- Main content container -->
     <div class="max-w-3xl mx-auto px-5 sm:px-6 py-8 md:py-20 relative z-10 min-h-screen flex flex-col">

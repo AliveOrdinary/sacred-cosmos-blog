@@ -1,0 +1,50 @@
+---
+---
+
+<div id="background-container" class="fixed inset-0 z-[-1] overflow-hidden bg-[#020305]">
+  <!-- Gradient Orbs -->
+  <div class="absolute left-[-10%] top-[-10%] w-[70%] h-[70%] rounded-full mix-blend-screen filter blur-[140px] bg-gradient-to-br from-teal-500/5 to-transparent pointer-events-none"></div>
+  <div class="absolute right-[-10%] bottom-[-10%] w-[70%] h-[70%] rounded-full mix-blend-screen filter blur-[140px] bg-gradient-to-tl from-blue-600/5 to-indigo-500/0 pointer-events-none"></div>
+
+  <!-- Noise Overlay for texture -->
+  <div class="absolute inset-0 z-10 opacity-[0.02] pointer-events-none mix-blend-overlay" style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E&quot;);"></div>
+
+  <!-- Stars Layers -->
+  <div class="absolute inset-0 z-10 stars-xs pointer-events-none opacity-70"></div>
+  <div class="absolute inset-0 z-10 stars-sm pointer-events-none opacity-40"></div>
+  <div class="absolute inset-0 z-10 stars-md pointer-events-none opacity-20"></div>
+</div>
+
+<style>
+  .stars-xs {
+    background-image: 
+      radial-gradient(1px 1px at 40px 70px, rgba(255, 255, 255, 0.2) 100%, transparent),
+      radial-gradient(1px 1px at 160px 120px, rgba(255, 255, 255, 0.15) 100%, transparent),
+      radial-gradient(1px 1px at 190px 50px, rgba(255, 255, 255, 0.25) 100%, transparent),
+      radial-gradient(1px 1px at 240px 140px, rgba(255, 255, 255, 0.3) 100%, transparent);
+    background-size: 350px 350px;
+    animation: twinkle-pulse 4s ease-in-out infinite alternate;
+  }
+  
+  .stars-sm {
+    background-image: 
+      radial-gradient(1.5px 1.5px at 150px 60px, rgba(255, 255, 255, 0.4) 100%, transparent),
+      radial-gradient(1.5px 1.5px at 60px 140px, rgba(255, 255, 255, 0.3) 100%, transparent),
+      radial-gradient(1.5px 1.5px at 280px 80px, rgba(255, 255, 255, 0.4) 100%, transparent);
+    background-size: 450px 450px;
+    animation: twinkle-pulse 5s ease-in-out infinite alternate-reverse;
+  }
+
+  .stars-md {
+    background-image: 
+      radial-gradient(2px 2px at 170px 40px, rgba(255, 255, 255, 0.5) 100%, transparent),
+      radial-gradient(2px 2px at 260px 220px, rgba(255, 255, 255, 0.6) 100%, transparent);
+    background-size: 600px 600px;
+    animation: twinkle-pulse 7s ease-in-out infinite alternate;
+  }
+
+  @keyframes twinkle-pulse {
+    0% { opacity: 0.3; transform: scale(0.99); }
+    100% { opacity: 1; transform: scale(1.01); }
+  }
+</style>
