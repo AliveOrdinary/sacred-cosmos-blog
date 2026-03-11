@@ -9,8 +9,11 @@
 }
 
 @layer base {
+  html {
+    @apply bg-[#020305];
+  }
   body {
-    @apply text-zinc-200 font-sans antialiased selection:bg-fuchsia-500 selection:text-white min-h-screen relative;
+    @apply bg-[#020305] text-zinc-200 font-sans antialiased selection:bg-fuchsia-500 selection:text-white min-h-screen relative;
   }
 }
 
