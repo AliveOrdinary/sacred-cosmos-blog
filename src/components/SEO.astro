@@ -14,11 +14,24 @@ const {
   image = "/favicon.svg", // Fallback image if needed, ideally a dedicated og-image.jpg
   type = "website",
   publishDate,
-  canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url),
+  canonicalURL,
 } = Astro.props;
 
-// Ensure relative image paths are resolved to absolute URLs
-const resolvedImage = new URL(image, Astro.site || Astro.url).toString();
+let finalCanonicalURL;
+try {
+  finalCanonicalURL = canonicalURL 
+    ? new URL(canonicalURL) 
+    : new URL(Astro.url.pathname, Astro.site || Astro.url);
+} catch (e) {
+  finalCanonicalURL = Astro.url;
+}
+
+let resolvedImage;
+try {
+  resolvedImage = new URL(image || "/favicon.svg", Astro.site || Astro.url).toString();
+} catch (e) {
+  resolvedImage = image || "/favicon.svg";
+}
 
 // Core JSON-LD logic
 const organizationSchema = {
@@ -66,7 +79,7 @@ const articleSchema = type === 'article' ? {
 <meta name="generator" content={Astro.generator} />
 
 <!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
+<link rel="canonical" href={finalCanonicalURL} />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
@@ -75,7 +88,7 @@ const articleSchema = type === 'article' ? {
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={type} />
-<meta property="og:url" content={canonicalURL} />
+<meta property="og:url" content={finalCanonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={resolvedImage} />
@@ -85,7 +98,7 @@ const articleSchema = type === 'article' ? {
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:url" content={finalCanonicalURL} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={resolvedImage} />

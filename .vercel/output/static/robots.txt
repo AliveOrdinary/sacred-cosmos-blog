@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://insights.sacredcosmos.org/sitemap-index.xml
